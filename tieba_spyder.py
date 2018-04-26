@@ -17,10 +17,11 @@ def loadPage(url,filename):
 	"""
 	headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"}
 	#urllib库的代理在urllib.request下，接收一个字典值{protocol name : url proxy}
-	url_proxy=request.ProxyHandler({"http":"http://127.0.0.1:8888/"})
-	opener=request.build_opener(url_proxy)
+	#url_proxy=request.ProxyHandler({'http':'http://127.0.0.1:8888/'})
+	#opener=request.build_opener(url_proxy)
 	html=request.Request(url,headers=headers)
-	response=opener.open(html)
+	#response=opener.open(html)
+	response=urlopen(html)
 	filename="第"+str(filename)+"页"+".html"
 	print("正在加载"+filename)
 	#print(response.read())
