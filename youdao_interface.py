@@ -3,6 +3,9 @@
 @author: trick150
 
 """
+def judge_pure_english(keyword):
+    return all(ord(c) < 128 for c in keyword)
+
 import hashlib
 import re
 import random
@@ -15,7 +18,15 @@ secretKey = 'cvI6ZVBjITjo6kRvp6CVF3tiEphtVmLt'
 #html头
 myurl = 'http://openapi.youdao.com/api'
 #待翻译
+isEnglish =True
+
 q = input("请输入待翻译内容：")
+if judge_pure_english(q)==True:
+	isEnglish=True
+else:
+	isEnglish=False
+
+
 
 fromLang = 'auto'
 toLang = 'auto'
@@ -37,15 +48,22 @@ ua_header={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11
 request=urllib.request.Request(myurl,headers=ua_header)
 response=urllib.request.urlopen(request)
 html=response.read().decode("utf-8")
+
+#url编码解码
 unquote_html=urllib.parse.unquote(html)
 #pattern
 p1=r'q=([a-z]*)'
-pattern = re.compile(p1)
+p2=r'q=([\u4e00-\u9fa5]*)'
+if isEnglish==True:
+	pattern = re.compile(p2)
+else:
+	pattern = re.compile(p1)
 #html必须从byte解码成str
 m = re.search(pattern,unquote_html)
 #print(type(html.decode("utf-8")))
-#print(html.decode("utf-8"))
+#print(unquote_html)
 #验证格式
 #print((m.group(0)))
-
-print(m.group(0).split('=')[1])
+print(q+":"+m.group(0).split('=')[1])
+#print(m.group(0).split('=')[1])
+#判断是否是全英文
