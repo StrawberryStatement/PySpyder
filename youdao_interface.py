@@ -3,9 +3,10 @@
 @author: trick150
 
 """
+#判断是否纯英文  ord：返回对应字符的ascii值
 def judge_pure_english(keyword):
     return all(ord(c) < 128 for c in keyword)
-
+#中英混合默认翻译为纯英文
 import hashlib
 import re
 import random
@@ -36,7 +37,7 @@ sign = appKey + q + str(salt) + secretKey
 m1 = hashlib.md5()
 m1.update(sign.encode("utf-8"))
 sign = m1.hexdigest()
-#构造GET Url
+#构造GET Url quote编码
 myurl = myurl + '?appKey=' + appKey + '&q=' + parse.quote(q) + '&from=' + fromLang + '&to=' + toLang + '&salt=' + str(
 	salt) + '&sign=' + sign
 
@@ -51,8 +52,8 @@ html=response.read().decode("utf-8")
 
 #url编码解码
 unquote_html=urllib.parse.unquote(html)
-#pattern
-p1=r'q=([a-z]*)'
+#re  pattern
+p1=r'q=([a-zA-Z\+]*)'
 p2=r'q=([\u4e00-\u9fa5]*)'
 if isEnglish==True:
 	pattern = re.compile(p2)
@@ -64,6 +65,6 @@ m = re.search(pattern,unquote_html)
 #print(unquote_html)
 #验证格式
 #print((m.group(0)))
-print(q+":"+m.group(0).split('=')[1])
+print(q+":"+m.group(0).split('=')[1].replace('+',' '))
 #print(m.group(0).split('=')[1])
 #判断是否是全英文
