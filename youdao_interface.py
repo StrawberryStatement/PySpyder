@@ -53,7 +53,7 @@ html=response.read().decode("utf-8")
 #url编码解码
 unquote_html=urllib.parse.unquote(html)
 #re  pattern
-p1=r'q=([a-zA-Z\+]*)'
+p1=r'q=([a-zA-Z\+\']*)'
 p2=r'q=([\u4e00-\u9fa5]*)'
 if isEnglish==True:
 	pattern = re.compile(p2)
@@ -65,6 +65,9 @@ m = re.search(pattern,unquote_html)
 #print(unquote_html)
 #验证格式
 #print((m.group(0)))
-print(q+":"+m.group(0).split('=')[1].replace('+',' '))
+if len(m.group(0).split('=')[1].replace('+',' '))>0:
+	print(q+":"+m.group(0).split('=')[1].replace('+',' '))
+else:
+	print(q + ":" + "翻译出错,无法识别")
 #print(m.group(0).split('=')[1])
 #判断是否是全英文
